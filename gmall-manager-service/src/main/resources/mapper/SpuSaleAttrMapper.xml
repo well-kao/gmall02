@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gy.gmall.manager.mapper.SpuSaleAttrMapper">
+    <resultMap id="spuSaleAttrMap" type="com.gy.gmall.bean.SpuSaleAttr" autoMapping="true">
+        <id property="id" column="id"></id>
+
+        <!--集合-->
+        <collection property="spuSaleAttrValueList" ofType="com.gy.gmall.bean.SpuSaleAttrValue" autoMapping="true">
+            <id property="id" column="sale_attr_value_id"></id>
+        </collection>
+    </resultMap>
+
+    <select id="selectBySpuId" resultMap="spuSaleAttrMap">
+        select sa.id ,sa.spu_id, sa.sale_attr_name,sa.sale_attr_id,
+        sv.id sale_attr_value_id,
+        sv.sale_attr_value_name
+        from spu_sale_attr sa inner join spu_sale_attr_value  sv
+        on  sa.spu_id=sv.spu_id and sa.sale_attr_id=sv.sale_attr_id
+        where  sa.spu_id=#{spu_id}
+    </select>
+
+    <!--查询spu销售属性-->
+    <select id="getSpuSaleAttr" resultMap="spuSaleAttrMap">
+        SELECT a.*,b.`sale_attr_value_name`,c.`sku_id`,IF(c.sku_id IS NOT NULL,1,0) is_checked  FROM spu_sale_attr a INNER JOIN spu_sale_attr_value b
+	ON a.`spu_id`=b.`spu_id` AND a.`sale_attr_id`=b.`sale_attr_id`
+	LEFT JOIN sku_sale_attr_value c ON a.`sale_attr_id`=c.`sale_attr_id` AND b.`id`=c.`sale_attr_value_id`
+	AND c.`sku_id`=#{arg0}
+	WHERE a.spu_id = #{arg1}
+    </select>
+
+</mapper>
