@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.gy.gmall.bean.*;
 import com.gy.gmall.manager.mapper.*;
 import com.gy.gmall.service.ManagerService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -74,6 +75,13 @@ public class ManageServiceImpl implements ManagerService {
         BaseAttrInfo baseAttrInfo = new BaseAttrInfo();
         baseAttrInfo.setCatalog3Id(catalog3Id);
         return baseAttrInfoMapper.getBaseAttrInfoByCatalog3Id(catalog3Id);
+
+    }
+    @Override
+    public List<BaseAttrInfo> getAttrList(List<String> attrValueIdList) {
+        String attrValueIds = StringUtils.join(attrValueIdList.toArray(), ",");
+        List<BaseAttrInfo> baseAttrInfoList = baseAttrInfoMapper.selectAttrInfoListByIds(attrValueIds);
+        return baseAttrInfoList;
 
     }
 

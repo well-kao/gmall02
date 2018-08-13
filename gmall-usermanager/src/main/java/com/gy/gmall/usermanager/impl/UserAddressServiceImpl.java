@@ -15,7 +15,9 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public List<UserAddress> getAllUserAddress(String userId) {
-        return null;
+        UserAddress userAddress = new UserAddress();
+        userAddress.setUserId(userId);
+        return userAddressMapper.select(userAddress);
     }
 
     @Override
